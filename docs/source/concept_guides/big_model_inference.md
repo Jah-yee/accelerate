@@ -303,6 +303,12 @@ If you want to offload your model on CPU, you can use [`cpu_offload`]. As a resu
 cpu_offload(model, execution_device)
 ```
 
+<Tip>
+
+    On Windows hosts where the total size of the offloaded weights comes close to the amount of system RAM, the first generation after loading the model is usually noticeably slower than the following ones: Windows has to grow and commit the pagefile while the weights are streamed to the GPU. The slow step does not repeat afterwards, so it is worth discarding it when benchmarking.
+
+</Tip>
+
 You can also use [`cpu_offload_with_hook`]. This function will offloads a model on the CPU and puts it back to an execution device when executed. The difference with [`cpu_offload`] is that the model stays on the execution device after the forward and is only offloaded again when the `offload` method of the returned `hook` is called. Furthermore, [`cpu_offload_with_hook`] is more performant but less memory saving. It is useful for pipelines running a model in a loop:
 
 ```python
